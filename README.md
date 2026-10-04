@@ -1,2 +1,2 @@
 # Registro-parametri
-Modulo per inserimento dati e tabella con storico
+Modulo per inserimento dati cubicatura e tabella con storico

@@ -1,0 +1,127 @@
+<!doctype html>
+<!--
+  Registro Parametri
+  Diario delle impostazioni della macchina di cubicatura.
+
+  Struttura della pagina:
+    1. Modulo di inserimento dei parametri
+    2. Tabella con lo storico delle registrazioni
+
+  La logica (lettura del modulo e creazione delle righe) è in app.js.
+  Lo stile usa Tailwind CSS, caricato da CDN.
+-->
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro Parametri</title>
+
+    <!-- Tailwind CSS (versione CDN: comoda per imparare, per un sito vero si usa la build) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!--
+      Classi riutilizzabili: invece di ripetere la stessa lista di classi su ogni campo,
+      la scrivo una volta sola qui e la richiamo con un nome corto.
+      Per cambiare l'aspetto di tutti i campi basta modificare queste righe.
+    -->
+    <style type="text/tailwindcss">
+      @layer components {
+        .gruppo-campo {
+          @apply space-y-1.5;
+        }
+        .etichetta {
+          @apply block text-sm font-bold text-zinc-800;
+        }
+        .campo {
+          @apply w-full rounded border border-zinc-400 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-900 focus:outline-none;
+        }
+        .cella {
+          @apply px-4 py-3;
+        }
+      }
+    </style>
+
+    <!-- "defer": lo script parte solo dopo che la pagina è stata caricata, così trova tutti gli elementi -->
+    <script src="app.js" defer></script>
+  </head>
+
+  <body class="mx-auto max-w-4xl bg-zinc-100 p-6 font-sans text-zinc-900 md:p-12">
+    <header>
+      <h1 class="my-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Registro Parametri</h1>
+    </header>
+
+    <main class="space-y-10">
+      <!-- 1. MODULO DI INSERIMENTO -->
+      <!-- Ogni <label for="..."> punta all'id del suo campo: cliccando l'etichetta si seleziona il campo -->
+      <!-- L'id del campo deve coincidere con uno dei nomi dell'elenco CAMPI in app.js -->
+      <section class="rounded-lg border border-zinc-300 bg-white p-6">
+        <form id="parForm" class="space-y-5">
+          <div class="gruppo-campo">
+            <label for="velFilm" class="etichetta">Velocità Film (m/min):</label>
+            <input type="number" id="velFilm" name="velFilm" step="0.01" placeholder="Es: 1.55" required class="campo" />
+          </div>
+
+          <div class="gruppo-campo">
+            <label for="velCatene" class="etichetta">Velocità Catene (m/min):</label>
+            <input type="number" id="velCatene" name="velCatene" step="0.01" placeholder="Es: 2.00" required class="campo" />
+          </div>
+
+          <div class="gruppo-campo">
+            <label for="porAcqua" class="etichetta">Portata Acqua (mL/min):</label>
+            <input type="number" id="porAcqua" name="porAcqua" step="0.01" placeholder="Es: 1000" required class="campo" />
+          </div>
+
+          <div class="gruppo-campo">
+            <label for="velTriangolo" class="etichetta">Velocità Triangolo (m/min):</label>
+            <input type="number" id="velTriangolo" name="velTriangolo" step="0.01" placeholder="Es: 0.50" required class="campo" />
+          </div>
+
+          <div class="gruppo-campo">
+            <label for="tempAcqua" class="etichetta">Temperatura Acqua (°C):</label>
+            <input type="number" id="tempAcqua" name="tempAcqua" step="0.01" placeholder="Es: 25.00" required class="campo" />
+          </div>
+
+          <div class="gruppo-campo">
+            <label for="posTriangolo" class="etichetta">Posizione Triangolo (m):</label>
+            <input type="number" id="posTriangolo" name="posTriangolo" step="0.01" placeholder="Es: 1.20" required class="campo" />
+          </div>
+
+          <div class="pt-2">
+            <button
+              type="submit"
+              class="w-full cursor-pointer rounded bg-zinc-800 px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-white transition hover:bg-zinc-700 active:bg-zinc-900"
+            >
+              Registra
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- 2. STORICO DELLE REGISTRAZIONI -->
+      <!-- Il contenitore con overflow-x-auto rende la tabella scorrevole in orizzontale sul telefono -->
+      <section class="overflow-hidden rounded-lg bg-white shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse text-left text-sm text-zinc-700">
+            <!-- La didascalia è visibile solo ai lettori di schermo (sr-only) -->
+            <caption class="sr-only">Storico delle impostazioni registrate</caption>
+
+            <!-- Una colonna per ogni campo del modulo, nello stesso ordine -->
+            <thead class="border-b border-zinc-300 bg-zinc-200 text-xs font-bold uppercase text-zinc-800">
+              <tr>
+                <th scope="col" class="cella">Velocità Film (m/min)</th>
+                <th scope="col" class="cella">Velocità Catene (m/min)</th>
+                <th scope="col" class="cella">Portata Acqua (mL/min)</th>
+                <th scope="col" class="cella">Temperatura Acqua (°C)</th>
+                <th scope="col" class="cella">Velocità Triangolo (m/min)</th>
+                <th scope="col" class="cella">Posizione Triangolo (m)</th>
+              </tr>
+            </thead>
+
+            <!-- Vuoto di proposito: le righe le crea app.js a ogni registrazione -->
+            <tbody id="regValori" class="divide-y divide-zinc-200"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
